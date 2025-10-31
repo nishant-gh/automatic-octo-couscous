@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Shield background -->
+  <defs>
+    <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Shield shape -->
+  <path d="M 64 8 L 24 24 L 24 60 C 24 88 44 108 64 120 C 84 108 104 88 104 60 L 104 24 Z"
+        fill="url(#shieldGradient)"
+        stroke="#ffffff"
+        stroke-width="3"/>
+
+  <!-- AI symbol (circuit pattern) -->
+  <circle cx="64" cy="50" r="8" fill="#ffffff"/>
+  <circle cx="48" cy="65" r="6" fill="#ffffff"/>
+  <circle cx="80" cy="65" r="6" fill="#ffffff"/>
+
+  <!-- Connecting lines -->
+  <line x1="64" y1="58" x2="48" y2="65" stroke="#ffffff" stroke-width="3"/>
+  <line x1="64" y1="58" x2="80" y2="65" stroke="#ffffff" stroke-width="3"/>
+
+  <!-- Checkmark -->
+  <path d="M 50 75 L 58 83 L 78 63"
+        stroke="#ffffff"
+        stroke-width="4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"/>
+</svg>

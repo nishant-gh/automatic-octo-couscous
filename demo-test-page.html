@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GuardianAI Demo - Test Scam Detection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .test-section {
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .test-section h2 {
+      color: #1f2937;
+      margin-top: 0;
+    }
+
+    .scam-simulation {
+      background: white;
+      border: 3px solid #dc2626;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+
+    .warning {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    button {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 8px 4px;
+    }
+
+    button:hover {
+      background: #b91c1c;
+    }
+
+    button.safe {
+      background: #059669;
+    }
+
+    button.safe:hover {
+      background: #047857;
+    }
+
+    .fake-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border: 3px solid red;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      z-index: 10000;
+      display: none;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      display: none;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 2px solid #e5e7eb;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    .phone-number {
+      font-size: 32px;
+      font-weight: bold;
+      color: #dc2626;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .countdown {
+      font-size: 48px;
+      color: #dc2626;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .info-box {
+      background: #dbeafe;
+      border-left: 4px solid #3b82f6;
+      padding: 16px;
+      margin: 16px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🛡️ GuardianAI Demo Page</h1>
+    <p>This page contains simulated scam scenarios to test GuardianAI's detection capabilities</p>
+  </div>
+
+  <div class="info-box">
+    <strong>Instructions:</strong> If GuardianAI extension is installed and active, it should detect and warn about the scam elements on this page. Try interacting with different sections below to see protection in action.
+  </div>
+
+  <!-- Test 1: Tech Support Scam -->
+  <div class="test-section">
+    <h2>Test 1: Tech Support Scam Pop-Up</h2>
+    <p>Click the button to simulate a fake virus warning pop-up</p>
+    <button onclick="showFakePopup()">Simulate Tech Support Scam</button>
+
+    <div class="warning">
+      <strong>Expected Behavior:</strong> GuardianAI should detect the urgency language, fake Microsoft branding, and suspicious phone number, then show a protection overlay.
+    </div>
+  </div>
+
+  <!-- Test 2: Phishing Form -->
+  <div class="test-section">
+    <h2>Test 2: Phishing Login Form</h2>
+    <div class="scam-simulation">
+      <h3 style="color: #dc2626;">⚠️ SECURITY ALERT ⚠️</h3>
+      <p>Your account has been temporarily suspended due to unusual activity. Please verify your identity immediately to reactivate your account.</p>
+      <p><strong>You must verify within 24 hours or your account will be permanently closed!</strong></p>
+
+      <form id="phishingForm">
+        <label>Email Address:</label>
+        <input type="email" name="email" placeholder="your@email.com">
+
+        <label>Password:</label>
+        <input type="password" name="password" placeholder="Enter your password">
+
+        <label>Social Security Number:</label>
+        <input type="text" name="ssn" placeholder="123-45-6789">
+
+        <button type="submit">Verify Account Now</button>
+      </form>
+    </div>
+
+    <div class="warning">
+      <strong>Expected Behavior:</strong> GuardianAI should detect suspicious form fields (password, SSN) and urgency language. Upon form submission, should show intervention overlay.
+    </div>
+  </div>
+
+  <!-- Test 3: Gift Card Scam -->
+  <div class="test-section">
+    <h2>Test 3: Gift Card Payment Request</h2>
+    <div class="scam-simulation">
+      <h3>Payment Method</h3>
+      <p>To continue with your service, please select a payment method:</p>
+
+      <select>
+        <option>Credit Card</option>
+        <option>iTunes Gift Card</option>
+        <option>Google Play Gift Card</option>
+        <option>Steam Gift Card</option>
+      </select>
+
+      <button onclick="alert('GuardianAI should intercept this!')">Pay with Gift Card</button>
+    </div>
+
+    <div class="warning">
+      <strong>Expected Behavior:</strong> GuardianAI should detect gift card payment request and show critical warning that legitimate companies never accept gift cards.
+    </div>
+  </div>
+
+  <!-- Test 4: Fake Urgency Countdown -->
+  <div class="test-section">
+    <h2>Test 4: Urgency Countdown Timer</h2>
+    <div class="scam-simulation">
+      <h3>SPECIAL OFFER - ACT NOW!!!</h3>
+      <p>This exclusive deal expires in:</p>
+      <div class="countdown" id="countdown">00:15:42</div>
+      <p>Don't miss out! This offer will NEVER be available again!</p>
+      <button>CLAIM NOW BEFORE IT'S TOO LATE!!!</button>
+    </div>
+
+    <div class="warning">
+      <strong>Expected Behavior:</strong> GuardianAI should detect countdown timer and excessive urgency language as manipulation tactics.
+    </div>
+  </div>
+
+  <!-- Test 5: Fake Tech Support Number -->
+  <div class="test-section">
+    <h2>Test 5: Tech Support Scam Number</h2>
+    <div class="scam-simulation">
+      <h3 style="color: #dc2626;">🚨 CRITICAL SECURITY WARNING 🚨</h3>
+      <p>Your Windows computer has been infected with a Trojan virus!</p>
+      <p>Your personal files will be encrypted in 2 hours if you don't act immediately!</p>
+      <p>Call Microsoft Support NOW:</p>
+      <div class="phone-number">1-888-555-0123</div>
+      <p><strong>DO NOT TURN OFF YOUR COMPUTER!</strong></p>
+    </div>
+
+    <div class="warning">
+      <strong>Expected Behavior:</strong> GuardianAI should detect fake Microsoft impersonation, urgency tactics, prominent phone number, and excessive exclamation marks.
+    </div>
+  </div>
+
+  <!-- Test 6: Remote Access Download -->
+  <div class="test-section">
+    <h2>Test 6: Remote Access Software Download</h2>
+    <div class="scam-simulation">
+      <h3>Technical Support Required</h3>
+      <p>Our technician needs to access your computer to fix the detected issues.</p>
+      <p>Please download and install the remote support tool:</p>
+      <button onclick="simulateDownload()">Download TeamViewer</button>
+      <button onclick="simulateDownload()">Download AnyDesk</button>
+    </div>
+
+    <div class="warning">
+      <strong>Expected Behavior:</strong> GuardianAI should intercept download attempt and warn that remote access software can be used by scammers to steal information.
+    </div>
+  </div>
+
+  <!-- Test 7: Safe Content (Control) -->
+  <div class="test-section">
+    <h2>Test 7: Safe Content (Control Test)</h2>
+    <div style="background: #d1fae5; padding: 20px; border-radius: 8px;">
+      <h3 style="color: #065f46;">Legitimate Website Content</h3>
+      <p>This is normal, safe content without any scam indicators.</p>
+      <p>GuardianAI should not trigger any warnings for this section.</p>
+      <button class="safe" onclick="alert('This is a safe action')">Safe Button</button>
+    </div>
+
+    <div class="warning">
+      <strong>Expected Behavior:</strong> GuardianAI should recognize this as safe content and not show any warnings.
+    </div>
+  </div>
+
+  <!-- Fake Popup (hidden by default) -->
+  <div class="overlay" id="overlay"></div>
+  <div class="fake-popup" id="fakePopup">
+    <h2 style="color: #dc2626;">⚠️ MICROSOFT SECURITY ALERT ⚠️</h2>
+    <p><strong>Your computer is infected with a Trojan virus!</strong></p>
+    <p>Error Code: 0x80070002</p>
+    <p>Call Microsoft Support immediately to prevent data loss:</p>
+    <div class="phone-number">1-888-FAKE-123</div>
+    <p style="color: #dc2626;"><strong>DO NOT CLOSE THIS WINDOW!</strong></p>
+    <button onclick="hideFakePopup()">Call Now</button>
+    <button onclick="hideFakePopup()" style="background: #6b7280;">Ignore (Risky)</button>
+  </div>
+
+  <script>
+    // Simulate tech support popup
+    function showFakePopup() {
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('fakePopup').style.display = 'block';
+    }
+
+    function hideFakePopup() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('fakePopup').style.display = 'none';
+    }
+
+    // Simulate countdown timer
+    let countdown = 942; // 15:42 in seconds
+    setInterval(() => {
+      if (countdown > 0) {
+        countdown--;
+        const minutes = Math.floor(countdown / 60);
+        const seconds = countdown % 60;
+        document.getElementById('countdown').textContent =
+          `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      }
+    }, 1000);
+
+    // Intercept form submission
+    document.getElementById('phishingForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('GuardianAI should have intercepted this form submission!');
+    });
+
+    // Simulate download
+    function simulateDownload() {
+      alert('GuardianAI should intercept this dangerous download!');
+    }
+
+    // Log page load for testing
+    console.log('GuardianAI Demo Page Loaded');
+    console.log('If GuardianAI is active, it should analyze this page automatically');
+  </script>
+
+  <div style="text-align: center; margin-top: 50px; padding: 30px; background: #f3f4f6; border-radius: 12px;">
+    <h2>🛡️ GuardianAI Protection Status</h2>
+    <p>Check your browser extension icon to see if GuardianAI detected threats on this page.</p>
+    <p>Open the dashboard to view detailed analysis reports.</p>
+  </div>
+</body>
+</html>

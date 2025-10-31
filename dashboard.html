@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GuardianAI Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f9fafb;
+      color: #1f2937;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 32px 48px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      font-size: 64px;
+    }
+
+    .title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .header-stats {
+      text-align: right;
+    }
+
+    .header-stat {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .header-stat-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 48px;
+    }
+
+    .nav {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 16px;
+    }
+
+    .nav-item {
+      padding: 12px 24px;
+      background: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #6b7280;
+    }
+
+    .nav-item:hover {
+      background: #f3f4f6;
+      color: #1f2937;
+    }
+
+    .nav-item.active {
+      background: #667eea;
+      color: white;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #1f2937;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+
+    .stat-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .stat-value {
+      font-size: 48px;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-change {
+      font-size: 14px;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+
+    .stat-up {
+      color: #059669;
+    }
+
+    .stat-down {
+      color: #dc2626;
+    }
+
+    .report-list {
+      list-style: none;
+    }
+
+    .report-item {
+      padding: 16px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .report-item:last-child {
+      border-bottom: none;
+    }
+
+    .report-icon {
+      font-size: 32px;
+    }
+
+    .report-content {
+      flex: 1;
+    }
+
+    .report-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .report-details {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .report-time {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .threat-badge {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .threat-danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .threat-suspicious {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .threat-safe {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #374151;
+    }
+
+    .input,
+    .textarea,
+    .select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .input:focus,
+    .textarea:focus,
+    .select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    .btn-danger {
+      background: #dc2626;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+
+    .contacts-list {
+      list-style: none;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: #f9fafb;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .contact-info {
+      flex: 1;
+    }
+
+    .contact-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .contact-details {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px;
+      color: #6b7280;
+    }
+
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .training-scenario {
+      background: #fef3c7;
+      border: 2px solid #fbbf24;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .training-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .training-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #92400e;
+    }
+
+    .training-difficulty {
+      padding: 4px 12px;
+      background: #fbbf24;
+      color: #78350f;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .training-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .settings-section {
+      margin-bottom: 32px;
+    }
+
+    .settings-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #1f2937;
+    }
+
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: #f9fafb;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .setting-label {
+      flex: 1;
+    }
+
+    .setting-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .setting-description {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .toggle {
+      position: relative;
+      width: 52px;
+      height: 28px;
+      background: #d1d5db;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .toggle.active {
+      background: #059669;
+    }
+
+    .toggle-knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+
+    .toggle.active .toggle-knob {
+      transform: translateX(24px);
+    }
+
+    .alert {
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 2px solid #34d399;
+    }
+
+    .alert-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border: 2px solid #fbbf24;
+    }
+
+    .alert-danger {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 2px solid #f87171;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo">🛡️</div>
+        <div>
+          <div class="title">GuardianAI Dashboard</div>
+          <div class="subtitle">Your Personal Scam Protection Center</div>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="header-stat" id="headerThreatsBlocked">0</div>
+        <div class="header-stat-label">Threats Blocked</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="nav">
+      <button class="nav-item active" data-section="overview">Overview</button>
+      <button class="nav-item" data-section="reports">Reports</button>
+      <button class="nav-item" data-section="training">Training</button>
+      <button class="nav-item" data-section="contacts">Trusted Contacts</button>
+      <button class="nav-item" data-section="settings">Settings</button>
+    </div>
+
+    <!-- Overview Section -->
+    <div id="overview" class="section active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🛡️</div>
+          <div class="stat-value" id="totalScans">0</div>
+          <div class="stat-label">Total Scans</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-value" id="threatsBlocked">0</div>
+          <div class="stat-label">Threats Blocked</div>
+          <div class="stat-change stat-down" id="threatChange">↓ 0 this week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔍</div>
+          <div class="stat-value" id="suspiciousFlags">0</div>
+          <div class="stat-label">Suspicious Flags</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-value" id="safeSites">0</div>
+          <div class="stat-label">Safe Sites</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Recent Activity</div>
+        <ul class="report-list" id="recentActivity">
+          <li class="empty-state">
+            <div class="empty-icon">📊</div>
+            <p>No recent activity. GuardianAI is monitoring in the background.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Reports Section -->
+    <div id="reports" class="section">
+      <div class="card">
+        <div class="card-title">Scam Detection Reports</div>
+        <ul class="report-list" id="reportsList">
+          <li class="empty-state">
+            <div class="empty-icon">📝</div>
+            <p>No reports yet. GuardianAI will log all scam detection events here.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Training Section -->
+    <div id="training" class="section">
+      <div class="card">
+        <div class="card-title">Scam Recognition Training</div>
+        <p style="color: #6b7280; margin-bottom: 24px;">
+          Practice identifying scams in a safe environment. Build your skills to recognize threats in the wild.
+        </p>
+
+        <div id="trainingScenarios"></div>
+
+        <button class="btn btn-primary" id="startTraining">Start New Training Scenario</button>
+      </div>
+    </div>
+
+    <!-- Contacts Section -->
+    <div id="contacts" class="section">
+      <div class="card">
+        <div class="card-title">Trusted Contacts</div>
+        <p style="color: #6b7280; margin-bottom: 24px;">
+          Add family members or friends who should be notified if GuardianAI detects a serious threat.
+        </p>
+
+        <ul class="contacts-list" id="contactsList">
+          <li class="empty-state">
+            <div class="empty-icon">👨‍👩‍👧</div>
+            <p>No trusted contacts yet. Add your family members to enable alerts.</p>
+          </li>
+        </ul>
+
+        <button class="btn btn-primary" id="showAddContact">Add Trusted Contact</button>
+      </div>
+
+      <div id="addContactForm" class="card" style="display: none;">
+        <div class="card-title">Add Trusted Contact</div>
+
+        <form id="contactForm">
+          <div class="form-group">
+            <label class="label" for="contactName">Name</label>
+            <input type="text" id="contactName" class="input" required>
+          </div>
+
+          <div class="form-group">
+            <label class="label" for="contactEmail">Email</label>
+            <input type="email" id="contactEmail" class="input" required>
+          </div>
+
+          <div class="form-group">
+            <label class="label" for="contactPhone">Phone</label>
+            <input type="tel" id="contactPhone" class="input">
+          </div>
+
+          <div class="form-group">
+            <label class="label" for="contactRelationship">Relationship</label>
+            <select id="contactRelationship" class="select" required>
+              <option value="">Select relationship</option>
+              <option value="child">Child</option>
+              <option value="grandchild">Grandchild</option>
+              <option value="spouse">Spouse</option>
+              <option value="sibling">Sibling</option>
+              <option value="friend">Friend</option>
+              <option value="caregiver">Caregiver</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 12px;">
+            <button type="submit" class="btn btn-primary">Save Contact</button>
+            <button type="button" class="btn btn-secondary" id="cancelAddContact">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Settings Section -->
+    <div id="settings" class="section">
+      <div class="card">
+        <div class="settings-section">
+          <div class="settings-title">Protection Settings</div>
+
+          <div class="setting-item">
+            <div class="setting-label">
+              <div class="setting-title">Real-time Protection</div>
+              <div class="setting-description">Monitor pages and warn about potential scams</div>
+            </div>
+            <div class="toggle active" id="toggleRealtime">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-label">
+              <div class="setting-title">Sound Alerts</div>
+              <div class="setting-description">Play sound when threats are detected</div>
+            </div>
+            <div class="toggle active" id="toggleSound">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-label">
+              <div class="setting-title">Family Alerts</div>
+              <div class="setting-description">Notify trusted contacts about serious threats</div>
+            </div>
+            <div class="toggle" id="toggleFamily">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-title">Monitoring Level</div>
+
+          <div class="form-group">
+            <select id="monitoringLevel" class="select">
+              <option value="low">Low - Only obvious scams</option>
+              <option value="medium">Medium - Balanced protection</option>
+              <option value="high" selected>High - Maximum protection (recommended)</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="saveSettings">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
