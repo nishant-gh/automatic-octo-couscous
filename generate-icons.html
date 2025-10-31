@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GuardianAI Icon Generator</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      text-align: center;
+    }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    button:hover {
+      background: #5568d3;
+    }
+    .preview {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 30px 0;
+    }
+    .preview-item {
+      text-align: center;
+    }
+    canvas {
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      margin: 10px;
+    }
+    .instructions {
+      background: #f9fafb;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: left;
+      margin-top: 30px;
+    }
+    .success {
+      background: #d1fae5;
+      color: #065f46;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 20px 0;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🛡️ GuardianAI Icon Generator</h1>
+    <p>Generate extension icons in PNG format</p>
+  </div>
+
+  <button onclick="generateAllIcons()">Generate All Icons</button>
+
+  <div class="success" id="success">
+    ✅ All icons generated successfully! Check your Downloads folder.
+  </div>
+
+  <div class="preview">
+    <div class="preview-item">
+      <p>16x16</p>
+      <canvas id="canvas16" width="16" height="16"></canvas>
+    </div>
+    <div class="preview-item">
+      <p>48x48</p>
+      <canvas id="canvas48" width="48" height="48"></canvas>
+    </div>
+    <div class="preview-item">
+      <p>128x128</p>
+      <canvas id="canvas128" width="128" height="128"></canvas>
+    </div>
+  </div>
+
+  <div class="instructions">
+    <h3>Instructions:</h3>
+    <ol>
+      <li>Click the "Generate All Icons" button above</li>
+      <li>Three PNG files will be downloaded automatically:
+        <ul>
+          <li>icon16.png</li>
+          <li>icon48.png</li>
+          <li>icon128.png</li>
+        </ul>
+      </li>
+      <li>Move these files to the <code>icons/</code> folder in your extension directory</li>
+      <li>Reload the extension in Chrome</li>
+    </ol>
+
+    <h3>Manual Installation:</h3>
+    <p>If the automatic download doesn't work:</p>
+    <ol>
+      <li>Right-click each canvas preview above</li>
+      <li>Select "Save image as..."</li>
+      <li>Save with the correct filename (icon16.png, icon48.png, icon128.png)</li>
+      <li>Move to the icons/ folder</li>
+    </ol>
+  </div>
+
+  <script>
+    function drawShieldIcon(canvas, size) {
+      const ctx = canvas.getContext('2d');
+      const scale = size / 128; // Scale based on 128px design
+
+      // Clear canvas
+      ctx.clearRect(0, 0, size, size);
+
+      // Create gradient
+      const gradient = ctx.createLinearGradient(0, 0, 0, size);
+      gradient.addColorStop(0, '#667eea');
+      gradient.addColorStop(1, '#764ba2');
+
+      // Draw shield shape
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+
+      const centerX = size / 2;
+      const topY = size * 0.1;
+      const shieldWidth = size * 0.7;
+      const shieldHeight = size * 0.8;
+
+      // Shield path
+      ctx.moveTo(centerX, topY);
+      ctx.lineTo(centerX - shieldWidth / 2, topY + size * 0.15);
+      ctx.lineTo(centerX - shieldWidth / 2, topY + shieldHeight * 0.5);
+      ctx.quadraticCurveTo(
+        centerX - shieldWidth / 2,
+        topY + shieldHeight * 0.8,
+        centerX,
+        topY + shieldHeight
+      );
+      ctx.quadraticCurveTo(
+        centerX + shieldWidth / 2,
+        topY + shieldHeight * 0.8,
+        centerX + shieldWidth / 2,
+        topY + shieldHeight * 0.5
+      );
+      ctx.lineTo(centerX + shieldWidth / 2, topY + size * 0.15);
+      ctx.closePath();
+      ctx.fill();
+
+      // Draw white checkmark
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = Math.max(2, size * 0.08);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      ctx.beginPath();
+      ctx.moveTo(centerX - size * 0.15, centerY);
+      ctx.lineTo(centerX - size * 0.05, centerY + size * 0.1);
+      ctx.lineTo(centerX + size * 0.2, centerY - size * 0.1);
+      ctx.stroke();
+
+      // Add AI circuit dots for larger icons
+      if (size >= 48) {
+        ctx.fillStyle = 'white';
+        const dotSize = size * 0.06;
+
+        // Center dot
+        ctx.beginPath();
+        ctx.arc(centerX, centerY - size * 0.15, dotSize, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Side dots
+        ctx.beginPath();
+        ctx.arc(centerX - size * 0.15, centerY - size * 0.05, dotSize * 0.7, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(centerX + size * 0.15, centerY - size * 0.05, dotSize * 0.7, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Connecting lines
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = Math.max(1, size * 0.03);
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY - size * 0.15);
+        ctx.lineTo(centerX - size * 0.15, centerY - size * 0.05);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY - size * 0.15);
+        ctx.lineTo(centerX + size * 0.15, centerY - size * 0.05);
+        ctx.stroke();
+      }
+
+      const centerY = size / 2;
+    }
+
+    function downloadCanvas(canvas, filename) {
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    function generateAllIcons() {
+      const sizes = [
+        { canvas: document.getElementById('canvas16'), size: 16, filename: 'icon16.png' },
+        { canvas: document.getElementById('canvas48'), size: 48, filename: 'icon48.png' },
+        { canvas: document.getElementById('canvas128'), size: 128, filename: 'icon128.png' }
+      ];
+
+      sizes.forEach(({ canvas, size, filename }) => {
+        drawShieldIcon(canvas, size);
+
+        // Small delay between downloads to avoid browser blocking
+        setTimeout(() => {
+          downloadCanvas(canvas, filename);
+        }, 100 * sizes.indexOf({ canvas, size, filename }));
+      });
+
+      // Show success message
+      document.getElementById('success').style.display = 'block';
+    }
+
+    // Generate preview on load
+    window.addEventListener('load', () => {
+      drawShieldIcon(document.getElementById('canvas16'), 16);
+      drawShieldIcon(document.getElementById('canvas48'), 48);
+      drawShieldIcon(document.getElementById('canvas128'), 128);
+    });
+  </script>
+</body>
+</html>
