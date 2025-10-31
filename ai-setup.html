@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GuardianAI - Enable AI Features</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #1f2937;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      text-align: center;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 80px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 36px;
+      color: #1f2937;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: #6b7280;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+
+    .status-warning {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+    }
+
+    .status-success {
+      background: #d1fae5;
+      border: 2px solid #34d399;
+    }
+
+    .status-icon {
+      font-size: 48px;
+    }
+
+    .status-content {
+      flex: 1;
+    }
+
+    .status-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .status-message {
+      color: #6b7280;
+    }
+
+    h2 {
+      font-size: 24px;
+      color: #1f2937;
+      margin-bottom: 20px;
+    }
+
+    .steps {
+      counter-reset: step-counter;
+    }
+
+    .step {
+      padding: 24px;
+      background: #f9fafb;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      position: relative;
+      padding-left: 80px;
+    }
+
+    .step::before {
+      counter-increment: step-counter;
+      content: counter(step-counter);
+      position: absolute;
+      left: 24px;
+      top: 24px;
+      width: 40px;
+      height: 40px;
+      background: #667eea;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .step-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #1f2937;
+    }
+
+    .step-description {
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .code {
+      background: #374151;
+      color: #f9fafb;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      margin: 12px 0;
+      overflow-x: auto;
+    }
+
+    .button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all 0.2s;
+    }
+
+    .button:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .info-box {
+      background: #dbeafe;
+      border-left: 4px solid #3b82f6;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .info-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #1e40af;
+    }
+
+    .links {
+      display: flex;
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .link {
+      flex: 1;
+      padding: 20px;
+      background: #f9fafb;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #1f2937;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .link:hover {
+      background: #f3f4f6;
+      transform: translateY(-2px);
+    }
+
+    .link-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .link-title {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">🛡️</div>
+      <h1>Enable AI Features</h1>
+      <div class="subtitle">Get the most out of GuardianAI with Chrome's Built-in AI</div>
+    </div>
+
+    <div class="card">
+      <div class="status status-warning" id="statusWarning">
+        <div class="status-icon">⚠️</div>
+        <div class="status-content">
+          <div class="status-title">AI Features Not Available</div>
+          <div class="status-message">GuardianAI is using pattern-based detection only. Follow the steps below to enable full AI protection.</div>
+        </div>
+      </div>
+
+      <div class="status status-success" id="statusSuccess" style="display: none;">
+        <div class="status-icon">✅</div>
+        <div class="status-content">
+          <div class="status-title">AI Features Enabled!</div>
+          <div class="status-message">GuardianAI is now using Chrome's Built-in AI for advanced scam detection.</div>
+        </div>
+      </div>
+
+      <h2>Setup Steps</h2>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-title">Download Chrome Dev or Canary</div>
+          <div class="step-description">
+            Chrome's Built-in AI requires Chrome 128+ or Chrome Dev/Canary channel.
+            <div class="code">chrome://version</div>
+            Check your version. If below 128, download Chrome Dev or Canary.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-title">Enable AI Flags</div>
+          <div class="step-description">
+            Open Chrome flags and enable the AI features:
+            <div class="code">chrome://flags</div>
+            Search for and enable:
+            <ul style="margin-top: 12px; margin-left: 20px;">
+              <li><strong>"Prompt API for Gemini Nano"</strong> → Set to "Enabled"</li>
+              <li><strong>"Rewriter API"</strong> → Set to "Enabled"</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-title">Restart Chrome</div>
+          <div class="step-description">
+            Click the "Relaunch" button that appears at the bottom of the flags page.
+            Chrome will restart with AI features enabled.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-title">Wait for Model Download (First Time)</div>
+          <div class="step-description">
+            The first time AI is used, Chrome downloads the language model (~1-2GB).
+            This may take 10-30 minutes depending on your connection.
+            <div class="info-box">
+              <div class="info-title">💡 Tip</div>
+              Keep Chrome open while downloading. You can check progress in DevTools Console.
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-title">Verify AI is Working</div>
+          <div class="step-description">
+            Open Chrome DevTools (F12) and run this in Console:
+            <div class="code">ai.languageModel.capabilities().then(c => console.log(c))</div>
+            You should see <code>available: "readily"</code> when ready.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-title">Reload GuardianAI</div>
+          <div class="step-description">
+            Reload the GuardianAI extension to activate AI features:
+            <div class="code">chrome://extensions/</div>
+            Find GuardianAI and click the reload icon.
+          </div>
+        </div>
+      </div>
+
+      <button class="button" onclick="checkAIStatus()">Check AI Status Now</button>
+      <button class="button" style="background: #6b7280;" onclick="openFlags()">Open Chrome Flags</button>
+    </div>
+
+    <div class="card">
+      <h2>Alternative: Pattern-Based Detection</h2>
+      <p style="color: #6b7280; line-height: 1.6; margin-bottom: 16px;">
+        Don't want to set up Chrome AI? GuardianAI still works with pattern-based detection!
+        It will detect common scam indicators like urgency language, suspicious requests, and known scam patterns.
+      </p>
+      <p style="color: #6b7280; line-height: 1.6;">
+        AI features provide more sophisticated analysis and better detection of subtle scams,
+        but pattern-based detection still offers significant protection.
+      </p>
+    </div>
+
+    <div class="links">
+      <a href="dashboard.html" class="link">
+        <div class="link-icon">📊</div>
+        <div class="link-title">Dashboard</div>
+      </a>
+      <a href="QUICKSTART.md" class="link">
+        <div class="link-icon">📖</div>
+        <div class="link-title">Quick Start Guide</div>
+      </a>
+      <a href="SETUP.md" class="link">
+        <div class="link-icon">🔧</div>
+        <div class="link-title">Full Setup Guide</div>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    async function checkAIStatus() {
+      const statusWarning = document.getElementById('statusWarning');
+      const statusSuccess = document.getElementById('statusSuccess');
+
+      try {
+        if (typeof ai === 'undefined' || !ai.languageModel) {
+          alert('❌ Chrome AI not detected.\n\nMake sure you:\n1. Are using Chrome 128+ or Dev/Canary\n2. Have enabled the AI flags\n3. Have restarted Chrome');
+          return;
+        }
+
+        const capabilities = await ai.languageModel.capabilities();
+
+        if (capabilities.available === 'readily') {
+          statusWarning.style.display = 'none';
+          statusSuccess.style.display = 'flex';
+          alert('✅ Chrome AI is available!\n\nNow reload the GuardianAI extension at chrome://extensions/');
+        } else if (capabilities.available === 'after-download') {
+          alert('⏳ AI model is downloading...\n\nThis can take 10-30 minutes.\nKeep Chrome open and check back later.');
+        } else {
+          alert('❌ AI not available.\n\nPlease complete the setup steps above.');
+        }
+      } catch (error) {
+        alert('❌ Error checking AI status:\n\n' + error.message);
+      }
+    }
+
+    function openFlags() {
+      chrome.tabs.create({ url: 'chrome://flags' });
+    }
+
+    // Check status on load
+    window.addEventListener('load', () => {
+      setTimeout(checkAIStatus, 1000);
+    });
+  </script>
+</body>
+</html>

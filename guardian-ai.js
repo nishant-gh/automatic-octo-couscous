@@ -18,11 +18,37 @@ class GuardianAI {
     if (this.initialized) return;
 
     try {
+      // Check if AI APIs exist
+      if (typeof ai === 'undefined' || !ai.languageModel) {
+        console.warn('⚠️ Chrome Built-in AI not available. Using pattern-based detection only.');
+        console.warn('To enable AI features:');
+        console.warn('1. Use Chrome 128+ or Chrome Dev/Canary');
+        console.warn('2. Enable flags at chrome://flags');
+        console.warn('   - "Prompt API for Gemini Nano"');
+        console.warn('   - "Rewriter API"');
+        console.warn('3. Restart Chrome');
+
+        this.initialized = true;
+        this.aiAvailable = false;
+        return;
+      }
+
       // Check if Prompt API is available
       const capabilities = await ai.languageModel.capabilities();
 
       if (capabilities.available === 'no') {
-        throw new Error('AI capabilities not available');
+        console.warn('⚠️ AI model not available. Using pattern-based detection only.');
+        this.initialized = true;
+        this.aiAvailable = false;
+        return;
+      }
+
+      if (capabilities.available === 'after-download') {
+        console.log('⏳ AI model downloading. This may take 10-30 minutes.');
+        console.log('Pattern-based detection active while downloading...');
+        this.initialized = true;
+        this.aiAvailable = false;
+        return;
       }
 
       // Create main scam detection session
@@ -62,10 +88,16 @@ RESPONSE FORMAT:
       }
 
       this.initialized = true;
-      console.log('GuardianAI initialized successfully');
+      this.aiAvailable = true;
+      console.log('✅ GuardianAI initialized successfully with AI features');
     } catch (error) {
       console.error('Failed to initialize GuardianAI:', error);
-      throw error;
+      console.warn('⚠️ Falling back to pattern-based detection');
+
+      this.initialized = true;
+      this.aiAvailable = false;
+
+      // Don't throw - allow extension to work with pattern-only detection
     }
   }
 
@@ -183,7 +215,12 @@ RESPONSE FORMAT:
       };
     }
 
-    // Perform AI analysis
+    // Perform AI analysis (if available)
+    if (!this.aiAvailable || !this.session) {
+      // Fallback to pattern-based analysis only
+      return this.fallbackAnalysis(screening);
+    }
+
     try {
       const prompt = `Analyze this content for scam indicators:
 

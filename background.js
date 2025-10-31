@@ -53,17 +53,37 @@ async function initializeGuardianAI() {
   try {
     guardianAI = new GuardianAI();
     await guardianAI.initialize();
-    console.log('GuardianAI initialized successfully');
+
+    if (guardianAI.aiAvailable) {
+      console.log('✅ GuardianAI initialized with full AI capabilities');
+    } else {
+      console.log('⚠️ GuardianAI initialized with pattern-based detection only');
+
+      // Show notification about AI features
+      chrome.notifications.create({
+        type: 'basic',
+        iconUrl: 'icons/icon128.png',
+        title: 'GuardianAI: Limited Mode',
+        message: 'Chrome AI not available. Using pattern detection. Click for setup instructions.',
+        priority: 1,
+        requireInteraction: true
+      });
+
+      // Open setup guide when notification clicked
+      chrome.notifications.onClicked.addListener(() => {
+        chrome.tabs.create({ url: 'dashboard.html?setup=ai' });
+      });
+    }
   } catch (error) {
     console.error('Failed to initialize GuardianAI:', error);
 
-    // Show error notification
+    // Should not reach here with updated graceful fallback
     chrome.notifications.create({
       type: 'basic',
       iconUrl: 'icons/icon128.png',
-      title: 'GuardianAI Initialization Issue',
-      message: 'Chrome AI features may not be available. Some protection features may be limited.',
-      priority: 1
+      title: 'GuardianAI Error',
+      message: 'Unexpected initialization error. Extension may not work correctly.',
+      priority: 2
     });
   }
 }
